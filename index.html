@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quantum Mechanics for CSIR NET</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5f4;--surface:#fff;--ink:#16222b;--muted:#5b6b75;--line:#cfd9d9;--accent:#0b6e75;--accent-ink:#fff;--mark:#fbe7b0;--ok:#1b7a4b;--bad:#b3362f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10181c;--surface:#18242a;--ink:#e6eef0;--muted:#9bb0b8;--line:#2c3d45;--accent:#4cc3cc;--accent-ink:#06282b;--mark:#4a3d12;--ok:#5fd394;--bad:#ff8a80}}
+:root[data-theme="dark"]{--bg:#10181c;--surface:#18242a;--ink:#e6eef0;--muted:#9bb0b8;--line:#2c3d45;--accent:#4cc3cc;--accent-ink:#06282b;--mark:#4a3d12;--ok:#5fd394;--bad:#ff8a80}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding:20px 18px 60px}
+h1{font-size:2rem;line-height:1.15;margin:.2em 0 .1em;font-weight:600}
+h2{font-size:1.35rem;margin:1.6em 0 .4em;font-weight:600}
+p{margin:.6em 0}
+.sub{color:var(--muted);font-family:"Instrument Sans",system-ui,sans-serif;font-size:.95rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 6px;font-family:"Instrument Sans",system-ui,sans-serif}
+nav button{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:20px;font:inherit;font-size:.9rem;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.bar{height:6px;background:var(--line);border-radius:3px;margin:10px 0 0;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+section{display:none}section.on{display:block}
+.eq{background:var(--mark);padding:10px 14px;border-radius:6px;margin:.8em 0;overflow-x:auto;font-size:1.1rem}
+.eq b{font-weight:600}
+ul{padding-left:1.2em;margin:.4em 0}li{margin:.3em 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin:1em 0}
+.tool label{display:inline-block;margin:6px 14px 6px 0;font-family:"Instrument Sans",system-ui,sans-serif;font-size:.9rem}
+.tool input,.tool select{width:84px;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit;font-size:.95rem}
+.tool select{width:auto}
+.out{font-size:1.15rem;margin-top:10px}
+.q{margin:1.2em 0;padding-bottom:1em;border-bottom:1px solid var(--line)}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:10px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;font:inherit;font-size:1rem;cursor:pointer}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--surface))}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,var(--surface))}
+.exp{font-size:.95rem;color:var(--muted);margin-top:6px}
+.done{font-family:"Instrument Sans",system-ui,sans-serif;font-size:.9rem;margin-top:2em;display:flex;gap:8px;align-items:center}
+.score{font-family:"Instrument Sans",system-ui,sans-serif;font-weight:600}
+.hud{display:flex;gap:18px;font-family:"Instrument Sans",system-ui,sans-serif;font-weight:600;margin:6px 0}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;font-family:"Instrument Sans",system-ui,sans-serif;font-size:.85rem}
+.bdg{padding:6px 10px;border:1px dashed var(--line);border-radius:16px;opacity:.5;filter:grayscale(1)}
+.bdg.got{opacity:1;filter:none;border:1px solid var(--accent)}
+.act{display:flex;gap:10px;margin-top:12px}
+.btn{padding:9px 16px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);font:inherit;font-family:"Instrument Sans",system-ui,sans-serif;font-size:.95rem;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn[hidden]{display:none}
+.fb{margin-top:12px;font-family:"Instrument Sans",system-ui,sans-serif;font-weight:600}
+.big{font-size:2rem}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--accent);color:var(--accent-ink);padding:10px 16px;border-radius:20px;font-family:"Instrument Sans",system-ui,sans-serif;font-weight:600;z-index:20}
+.pf{position:fixed;top:45%;font-size:1.4rem;pointer-events:none;animation:pf 1s ease-out forwards;z-index:20}
+@keyframes pf{to{transform:translate(var(--dx),var(--dy)) rotate(360deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){.pf{display:none}}
+.why{margin:7px 0;font-size:.95rem;color:var(--muted)}.why.c{color:var(--ok)}.why.p{color:var(--bad)}.kp{margin:0 0 10px 26px;font-family:'Instrument Sans',system-ui,sans-serif;font-size:.9rem}.kp summary{cursor:pointer;color:var(--accent)}
+.done[hidden]{display:none}.sy{display:block;margin:6px 0;font-family:'Instrument Sans',system-ui,sans-serif;font-size:.95rem}.filters{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0;font-family:'Instrument Sans',system-ui,sans-serif;font-size:.9rem}.filters select{padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Chemistry trainer: CSIR NET and GATE CY</h1>
+<p class='sub'>Pick your exam, tick off the syllabus, and drill questions across all three sections. The bar tracks the quantum notes you have finished.</p>
+<div class='filters'><label>Exam <select id='exam'><option value='B'>CSIR NET + GATE</option><option value='C'>CSIR NET only</option><option value='G'>GATE CY only</option></select></label></div>
+<div class="bar" aria-hidden="true"><i id="prog"></i></div>
+<nav role="tablist" id="tabs"></nav>
+
+<section id="basics">
+<h2>Postulates and operators</h2>
+<ul>
+<li>The state is a wavefunction ψ. |ψ|² is probability density. ψ must be normalizable, single-valued, continuous and finite.</li>
+<li>Every observable is a <b>Hermitian operator</b>: real eigenvalues, orthogonal eigenfunctions for different eigenvalues.</li>
+<li>A measurement returns only an eigenvalue. Expectation value: ⟨A⟩ = ∫ψ*Âψ dτ.</li>
+<li>Stationary states obey ĤΨ = EΨ.</li>
+</ul>
+<h2>Commutators (often tested)</h2>
+<div class="eq">[x, p] = iħ &nbsp;&nbsp; [L<sub>x</sub>, L<sub>y</sub>] = iħL<sub>z</sub> &nbsp;&nbsp; [L², L<sub>z</sub>] = 0</div>
+<p>If [A, B] = 0, both can be known simultaneously. Otherwise ΔA·ΔB ≥ ½|⟨[A,B]⟩|, so Δx·Δp ≥ ħ/2.</p>
+</section>
+
+<section id="box">
+<h2>Particle in a 1D box (length L)</h2>
+<div class="eq">ψ<sub>n</sub> = √(2/L) sin(nπx/L) &nbsp;&nbsp; <b>E<sub>n</sub> = n²h²/(8mL²)</b></div>
+<ul>
+<li>n = 0 is not allowed, so there is a zero-point energy. State n has n−1 nodes.</li>
+<li>⟨x⟩ = L/2 and ⟨p⟩ = 0 for every state. ⟨p²⟩ = n²h²/4L².</li>
+<li>Spacing E<sub>n+1</sub> − E<sub>n</sub> = (2n+1)h²/8mL² grows with n and shrinks with larger L or m.</li>
+<li>3D box: E = (h²/8m)(n<sub>x</sub>²/L<sub>x</sub>² + n<sub>y</sub>²/L<sub>y</sub>² + n<sub>z</sub>²/L<sub>z</sub>²). A cube gives degeneracy.</li>
+<li>Free-electron model: butadiene (4 π electrons) HOMO n=2, LUMO n=3, ΔE = 5h²/8mL². Longer conjugation means longer absorption wavelength.</li>
+</ul>
+<div class="card tool">
+<b>Box calculator</b><br>
+<label>L (nm) <input id="L" type="number" value="1" min="0.1" step="0.1"></label>
+<label>From n <input id="ni" type="number" value="1" min="1"></label>
+<label>To n <input id="nf" type="number" value="2" min="1"></label>
+<label>Particle <select id="m"><option value="1">electron</option><option value="1836.15">proton</option></select></label>
+<div class="out" id="res"></div>
+</div>
+</section>
+
+<section id="sho">
+<h2>Harmonic oscillator</h2>
+<div class="eq"><b>E<sub>v</sub> = (v + ½)ħω</b> &nbsp;&nbsp; ω = √(k/μ)</div>
+<ul>
+<li>Zero-point energy ½ħω. Levels are equally spaced. Selection rule Δv = ±1.</li>
+<li>ψ<sub>v</sub> = N<sub>v</sub>H<sub>v</sub>(ξ)e<sup>−ξ²/2</sup>. H₀ = 1, H₁ = 2ξ, H₂ = 4ξ² − 2. Parity is (−1)<sup>v</sup>.</li>
+<li>Virial theorem: ⟨T⟩ = ⟨V⟩ = E/2.</li>
+<li>Anharmonic: E<sub>v</sub> = (v+½)ħω − (v+½)²ħωx<sub>e</sub>. Levels converge, overtones become weakly allowed.</li>
+<li>ZPE ∝ 1/√μ. Heavier isotopologues have lower ZPE, which underlies the kinetic isotope effect.</li>
+</ul>
+</section>
+
+<section id="h">
+<h2>Hydrogen atom</h2>
+<div class="eq"><b>E<sub>n</sub> = −13.6 Z²/n² eV</b></div>
+<ul>
+<li>l = 0 to n−1, m = −l to +l. Energy depends on n only, so each level is n²-fold degenerate (ignoring spin).</li>
+<li><b>Radial nodes = n − l − 1. Angular nodes = l. Total = n − 1.</b></li>
+<li>|L| = √(l(l+1)) ħ, L<sub>z</sub> = mħ. Spin s = ½, |S| = (√3/2)ħ.</li>
+<li>For 1s, the most probable r is a₀ but ⟨r⟩ = 1.5 a₀.</li>
+<li>Only s orbitals have nonzero density at the nucleus.</li>
+</ul>
+</section>
+
+<section id="tun">
+<h2>Tunneling</h2>
+<div class="eq">T ∝ e<sup>−2κL</sup> &nbsp;&nbsp; κ = √(2m(V−E))/ħ</div>
+<ul>
+<li>Transmission falls exponentially with barrier width and particle mass.</li>
+<li>H tunnels far more readily than D, which is why tunneling shows up in isotope effects.</li>
+<li>Applications: scanning tunneling microscopy, proton transfer, α decay.</li>
+</ul>
+</section>
+
+<section id='syl'>
+<h2>Syllabus checklist</h2>
+<p class='sub' id='sylc'></p>
+<div id='syll'></div>
+</section>
+
+<section id='quiz'>
+<h2>Practice</h2>
+<div class='filters'><label>Section <select id='sec'><option value='A'>All sections</option><option value='P'>Physical</option><option value='I'>Inorganic</option><option value='O'>Organic</option></select></label><label>Level <select id='lv'></select></label></div>
+<p class="sub">100 levels, from basics to CSIR exam level. Clear a level with 3 of 5 correct. Every 10th level is a boss with 8 questions, and you need 6.</p>
+<div class="hud"><span id="lvl">Level 1</span><span id="xp">0 XP</span><span id="str">🔥 0</span></div>
+<div class="bar" aria-hidden="true"><i id="xpbar"></i></div>
+<div id="game"></div>
+<div id="badges" class="badges"></div>
+</section>
+
+<div class="done" id="doneRow"><input type="checkbox" id="doneBox"><label for="doneBox">Mark this tab as done</label></div>
+</div>
+
+<script>
+const topics=[['quiz','Practice'],['syl','Syllabus'],['basics','QM: basics'],['box','QM: box'],['sho','QM: oscillator'],['h','QM: hydrogen'],['tun','QM: tunneling']];
+let done={},cur="basics";
+try{done=JSON.parse(localStorage.getItem("qm-done")||"{}")}catch(e){done={}}
+const tabs=document.getElementById("tabs");
+topics.forEach(([id,name])=>{const b=document.createElement("button");b.textContent=name;b.setAttribute("role","tab");b.dataset.id=id;b.onclick=()=>show(id);tabs.appendChild(b)});
+function show(id){cur=id;
+document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===id));
+tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b.dataset.id===id));
+document.getElementById('doneBox').checked=!!done[id];document.getElementById('doneRow').hidden=(id==='syl'||id==='quiz');update();window.scrollTo(0,0)}
+function update(){const T=topics.filter(t=>t[0]!=='syl'&&t[0]!=='quiz'),n=T.filter(([id])=>done[id]).length;
+document.getElementById('prog').style.width=(n/T.length*100)+'%';
+tabs.querySelectorAll("button").forEach(b=>{const t=topics.find(x=>x[0]===b.dataset.id)[1];b.textContent=(done[b.dataset.id]?"✓ ":"")+t})}
+document.getElementById("doneBox").onchange=e=>{done[cur]=e.target.checked;try{localStorage.setItem("qm-done",JSON.stringify(done))}catch(x){}update()};
+
+function calc(){const L=+document.getElementById("L").value,a=+document.getElementById("ni").value,b=+document.getElementById("nf").value,m=+document.getElementById("m").value;
+const out=document.getElementById("res");
+if(!(L>0&&a>=1&&b>=1)){out.textContent="Enter L > 0 and n ≥ 1.";return}
+const E=n=>0.37606*n*n/(L*L*m);
+let t="E<sub>"+a+"</sub> = "+E(a).toPrecision(4)+" eV, E<sub>"+b+"</sub> = "+E(b).toPrecision(4)+" eV";
+const d=Math.abs(E(b)-E(a));
+t+=d>0?"<br>ΔE = "+d.toPrecision(4)+" eV, λ = "+(1239.84/d).toPrecision(4)+" nm":"<br>No transition (same level).";
+out.innerHTML=t}
+["L","ni","nf","m"].forEach(i=>document.getElementById(i).oninput=calc);calc();
+
+const Q=[
+["Evaluate the commutator [x, p²].",["iħp","2iħp","−2iħp","ħ²"],1,"[x,p²] = p[x,p] + [x,p]p = 2iħp."],
+["How many states in a cubic box have E = 14 h²/8mL²?",["3","6","1","12"],1,"n<sub>x</sub>²+n<sub>y</sub>²+n<sub>z</sub>² = 14 only for permutations of (1,2,3): 3! = 6."],
+["A 4d orbital has how many radial and angular nodes?",["1 radial, 2 angular","2 radial, 1 angular","0 radial, 2 angular","1 radial, 3 angular"],0,"Radial = n−l−1 = 1, angular = l = 2."],
+["Going from H₂ to D₂ (same k), the zero-point energy changes by a factor of",["2","√2","1/√2","1/2"],2,"ZPE ∝ 1/√μ and μ doubles, so ZPE falls to 1/√2 ≈ 0.71."],
+["⟨p⟩ for a particle in a 1D box in state n is",["nh/2L","0","ħ","nπħ/L"],1,"ψ is real, so the momentum expectation is zero. ⟨p²⟩ is not zero."],
+["Which statement about the harmonic oscillator is correct?",["Levels get closer as v increases","ZPE is zero","⟨T⟩ = ⟨V⟩ in every stationary state","Δv = ±2 is the main selection rule"],2,"The virial theorem for V ∝ x² gives ⟨T⟩ = ⟨V⟩ = E/2."],
+["Which orbital has nonzero probability density at the nucleus?",["2p","3d","3s","4f"],2,"Only s orbitals (l = 0) are nonzero at r = 0."],
+["Tunneling probability through a barrier decreases when",["mass decreases","width increases","barrier height decreases","E approaches V"],1,"T ∝ e<sup>−2κL</sup>, so it falls as width L or mass increases."]
+,
+["Energy of the n = 3 level relative to n = 1 in a 1D box:",["3×","6×","9×","27×"],2,"E ∝ n², so 3² = 9."],
+["Number of nodes (excluding the walls) for n = 4 in a 1D box:",["4","3","5","2"],1,"State n has n − 1 nodes."],
+["Which pair of operators does NOT commute?",["L² and L<sub>z</sub>","x and p<sub>y</sub>","p<sub>x</sub> and p<sub>y</sub>","L<sub>x</sub> and L<sub>y</sub>"],3,"[L<sub>x</sub>, L<sub>y</sub>] = iħL<sub>z</sub> ≠ 0. The others commute."],
+["Ground state energy of He⁺ (eV):",["−13.6","−27.2","−54.4","−6.8"],2,"E = −13.6 Z²/n² with Z = 2 gives −54.4 eV."],
+["Degeneracy of the n = 3 level of hydrogen (ignoring spin):",["3","6","9","18"],2,"n² = 9 (one 3s, three 3p, five 3d)."],
+["Magnitude of orbital angular momentum of a d electron:",["√2 ħ","√6 ħ","2ħ","√12 ħ"],1,"|L| = √(l(l+1)) ħ with l = 2 gives √6 ħ."],
+["Free-electron model for butadiene: HOMO→LUMO gap in units of h²/8mL² is",["3","4","5","7"],2,"HOMO n = 2, LUMO n = 3, so 9 − 4 = 5."],
+["The ground-state wavefunction of the harmonic oscillator is",["A sine function","A Gaussian","An exponential decay","A linear function"],1,"ψ₀ ∝ e<sup>−ξ²/2</sup>, a Gaussian."],
+["For the harmonic oscillator in v = 0, ⟨V⟩ equals",["ħω/2","ħω/4","0","ħω"],1,"⟨V⟩ = E/2 = ½(½ħω) = ¼ħω."],
+["If Δx is halved, the minimum Δp",["halves","stays the same","doubles","quadruples"],2,"Δx·Δp ≥ ħ/2, so Δp must double."],
+["Eigenvalues of a Hermitian operator are always",["imaginary","real","complex","zero"],1,"Hermitian operators have real eigenvalues, which is why they represent observables."],
+["If the box length L doubles, the ground state energy becomes",["2×","1/2","1/4","4×"],2,"E ∝ 1/L²."],
+["The most probable radius of the hydrogen 1s electron is",["0.5 a₀","a₀","1.5 a₀","2 a₀"],1,"The radial distribution 4πr²ψ² peaks at a₀. The mean ⟨r⟩ is 1.5 a₀."],
+["Which isotope tunnels most easily through the same barrier?",["H","D","T","All equally"],0,"Lighter mass gives a smaller κ·L exponent, so more tunneling."],
+["Allowed transition for an ideal harmonic oscillator:",["v = 0 → 2","v = 0 → 1","v = 0 → 3","None"],1,"The selection rule is Δv = ±1."]
+,
+["ΔG for a spontaneous process at constant T and P is",["positive","negative","zero","equal to ΔH"],1,"Spontaneous at constant T and P means ΔG < 0.","P"],
+["(∂G/∂T) at constant P equals",["S","−S","H","−H"],1,"dG = −S dT + V dP.","P"],
+["Degrees of freedom for one component with two phases in equilibrium",["0","1","2","3"],1,"F = C − P + 2 = 1.","P"],
+["First-order reaction, k = 0.0693 min⁻¹. Half-life (min)?",["5","10","20","0.693"],1,"t½ = 0.693/k = 10 min.","P"],
+["At 298 K the Nernst slope for an n-electron process is",["0.0592/n V per log unit","0.0257/n V per log unit","0.118/n V","0.0592n V"],0,"E = E° − (0.0592/n) log Q.","P"],
+["Spacing between adjacent rotational lines (rigid rotor) is",["B","2B","4B","B/2"],1,"Lines at 2B(J+1), so the spacing is 2B.","P"],
+["A vibration is IR active when",["polarizability changes","dipole moment changes","mass changes","the bond is homonuclear"],1,"IR needs a changing dipole. Raman needs a changing polarizability.","P"],
+["Point group of H₂O",["C₂v","C₂h","D₂h","Cs"],0,"One C₂ axis and two σv planes.","P"],
+["Langmuir isotherm at low pressure: coverage θ is proportional to",["P⁰","P","P²","√P"],1,"θ = KP/(1+KP) ≈ KP.","P"],
+["Debye–Hückel limiting law: log γ± is proportional to",["I","√I","I²","1/I"],1,"log γ± = −A|z₊z₋|√I.","P"],
+["Which ensemble has fixed μ, V and T?",["Microcanonical","Canonical","Grand canonical","Isobaric"],2,"Grand canonical exchanges energy and particles with a reservoir.","P","G"],
+["Mw/Mn of a polymer is called the",["polydispersity index","degree of polymerization","tacticity","conversion"],0,"PDI ≥ 1, and equals 1 for a uniform polymer.","P","C"],
+["Mean and sample standard deviation of 2, 4, 6, 8",["5; 2.58","5; 2.24","4; 2.58","5; 6.67"],0,"Squared deviations sum to 20. Divide by n−1 = 3 and take the root.","P","C"],
+["X-rays of λ = 1.54 Å, d = 3.08 Å, n = 1. What is sinθ?",["0.25","0.5","0.75","1"],0,"nλ = 2d sinθ gives 1.54/6.16 = 0.25.","P"],
+["B₅H₉ is nido. How many skeletal electron pairs?",["5","6","7","8"],2,"nido has n+2 pairs: 5+2 = 7.","I"],
+["Spin-only moment of high-spin Fe³⁺ (BM)",["1.73","3.87","4.90","5.92"],3,"d⁵ high spin has 5 unpaired electrons: √35 = 5.92.","I"],
+["CFSE of low-spin octahedral d⁶ (in Δo, ignoring pairing)",["−2.4","−1.6","−0.4","−1.2"],0,"t₂g⁶ gives 6 × (−0.4) = −2.4.","I"],
+["Electron count of Fe(CO)₅",["16","18","20","17"],1,"8 + 5×2 = 18.","I"],
+["[Fe(CN)₆]⁴⁻ has how many unpaired electrons?",["0","2","4","6"],0,"Fe²⁺ is d⁶, and CN⁻ is a strong-field ligand, so it is low spin.","I"],
+["Fraction of a radioactive sample left after 2 half-lives",["1/2","1/4","1/8","1/3"],1,"(1/2)² = 1/4.","I","C"],
+["The Bailar twist is a pathway for",["racemization of octahedral tris-chelates","square-planar substitution","electron transfer","oxidative addition"],0,"Bailar and Ray–Dutt twists interconvert Δ and Λ isomers.","I","G"],
+["Mössbauer isomer shift mainly reflects",["oxidation state and s-electron density","molecular mass","spin multiplicity only","bond length only"],0,"It probes s-electron density at the nucleus.","I"],
+["Wilkinson’s catalyst, RhCl(PPh₃)₃, is used for",["hydrogenation of alkenes","Wacker oxidation","olefin metathesis","Fischer–Tropsch"],0,"It is a homogeneous alkene hydrogenation catalyst.","I"],
+["Which is aromatic?",["Cyclobutadiene","Cyclopentadienyl cation","Cyclopentadienyl anion","Cyclooctatetraene"],2,"6 π electrons, planar and cyclic.","O"],
+["SN2 at a chiral carbon gives",["retention","inversion","racemization","no reaction"],1,"Backside attack gives Walden inversion.","O"],
+["Thermal 4π electrocyclization proceeds",["conrotatory","disrotatory","by both","by neither"],0,"Thermal 4n π is conrotatory. Photochemical is disrotatory.","O"],
+["Sharpless epoxidation works on",["allylic alcohols","simple alkenes","ketones","alkynes"],0,"Ti(OiPr)₄, a tartrate ester and TBHP.","O"],
+["Silver carboxylate + Br₂ gives an alkyl bromide (loses CO₂). Name?",["Hunsdiecker","Clemmensen","Cannizzaro","Wolff"],0,"Hunsdiecker reaction.","O","G"],
+["¹H NMR: a 3H triplet plus a 2H quartet indicates",["an ethyl group","an isopropyl group","a tert-butyl group","a vinyl group"],0,"CH₃ couples to 2 H, CH₂ couples to 3 H.","O"],
+["90% ee corresponds to an enantiomer ratio of",["90:10","95:5","99:1","80:20"],1,"ee = 95 − 5 = 90.","O"],
+["Suzuki coupling pairs an aryl halide with",["an organoboron","an organotin","an organozinc","a Grignard"],0,"Pd-catalysed, using a boronic acid or ester.","O"]
+];
+let ex='B',sec='A';
+try{ex=localStorage.getItem('qm-ex')||'B'}catch(e){}
+const okEx=e=>e==='B'||ex==='B'||e===ex;
+const BD=[["first","🎯","First correct answer"],["s3","🔥","3 in a row"],["s5","⚡","5 in a row"],["perf","🏆","Perfect round"],['l3','🚀','XP rank 3'],['q10','🥉','Clear level 10'],['q50','🥈','Clear level 50'],['q100','🥇','Clear level 100']];
+let st={xp:0,badges:{}};
+try{const s=JSON.parse(localStorage.getItem("qm-game"));if(s)st=s}catch(e){}
+let round=[],idx=0,streak=0,right=0,locked=false;
+const $=id=>document.getElementById(id);
+const lvl=()=>Math.floor(st.xp/50)+1;
+function save(){try{localStorage.setItem("qm-game",JSON.stringify(st))}catch(e){}}
+function hud(){$("lvl").textContent="Level "+curLv+"/100 · "+TN[Math.ceil(curLv/20)-1];$("xp").textContent=st.xp+" XP";$("str").textContent="🔥 "+streak;$("xpbar").style.width=((st.lv-1)/99*100)+"%";
+$("badges").innerHTML=BD.map(b=>'<span class="bdg'+(st.badges[b[0]]?" got":"")+'">'+b[1]+" "+b[2]+"</span>").join("")}
+function toast(t){const d=document.createElement("div");d.className="toast";d.setAttribute("role","status");d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+function award(id){if(st.badges[id])return;st.badges[id]=1;const b=BD.find(x=>x[0]===id);toast(b[1]+" Badge: "+b[2]);save()}
+function burst(){for(let i=0;i<22;i++){const s=document.createElement("span");s.className="pf";s.textContent=["⭐","✨","⚛️","🎉"][i%4];s.style.left=(30+Math.random()*40)+"%";s.style.setProperty("--dx",(Math.random()*240-120)+"px");s.style.setProperty("--dy",(Math.random()*-240-40)+"px");document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}}
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+function render(){const g=$("game");locked=false;hud();
+if(idx>=round.length){const f=right/round.length,stars=f>=.9?"⭐⭐⭐":f>=.6?"⭐⭐":f>=.4?"⭐":"Keep going";
+if(right===round.length)award("perf");finishLevel();
+g.innerHTML='<div class="card"><div class="big">'+stars+'</div><p><b>'+right+' / '+round.length+' correct.</b> '+(right>=needFor()?"Level cleared!":"You need "+needFor()+" correct to clear this level.")+'</p><div class="act"><button class="btn" id="again">'+(right>=needFor()?'Next level':'Retry level')+'</button></div></div>';
+$("again").onclick=()=>{if(right>=needFor())curLv=Math.min(100,curLv+1);start()};hud();return}
+const q=Q[round[idx]];
+g.innerHTML='<p class="sub">Question '+(idx+1)+' of '+round.length+'</p><p><b>'+q[0]+'</b></p><div id="opts"></div><div class="act"><button class="btn ghost" id="show">Show answer</button><button class="btn" id="next" hidden></button></div><div class="fb" id="fb" role="status"></div><div class="exp" id="ex"></div>';
+q[1].forEach((o,j)=>{const b=document.createElement("button");b.className="opt";b.innerHTML=o;b.onclick=()=>pick(j);$("opts").appendChild(b)});
+$("show").onclick=reveal;
+$("next").onclick=()=>{idx++;render()}}
+function finish(){locked=true;$("show").hidden=true;const n=$("next");n.hidden=false;n.textContent=idx===round.length-1?"See results":"Next question";n.focus();showWhy()}
+function mark(j){const o=$("opts").children,c=Q[round[idx]][2];o[c].classList.add("ok");if(j!=null&&j!==c)o[j].classList.add("bad")}
+function pick(j){if(locked)return;const c=Q[round[idx]][2];picked=j;mark(j);
+if(j===c){right++;streak++;const before=lvl();const gain=10+Math.min(streak,5)*2;st.xp+=gain;$("fb").textContent="Correct! +"+gain+" XP";burst();award("first");if(streak>=3)award("s3");if(streak>=5)award("s5");if(lvl()>before)toast("XP rank "+lvl());if(lvl()>=3)award("l3")}
+else{streak=0;$("fb").textContent="Not quite. The correct answer is highlighted."}
+save();hud();finish()}
+function reveal(){if(locked)return;streak=0;picked=null;mark(null);$("fb").textContent="Answer revealed. No XP this time.";hud();finish()}
+const DIFF=[3,4,2,3,3,3,1,2,1,1,2,2,2,2,3,2,3,2,1,1,3,1,1,1,3,2,2,2,3,1,1,2,3,4,2,2,3,4,2,3,2,3,1,5,4,3,2,1,3,3,4,2,3,2];
+const BASE=Q.length,TN=['Basics','Intermediate','Advanced','GATE level','CSIR exam level'];
+st.lv=st.lv||1;let curLv=Math.min(100,st.lv);
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const f3=x=>+(+x).toPrecision(3);
+const needFor=()=>curLv%10===0?6:3;
+function mk(q,c,ds,ex,sec){const set=[...new Set(ds.filter(d=>d!==c))].slice(0,3);let k=2;while(set.length<3){const v=String(f3(+c*k||k));if(v!==c&&!set.includes(v))set.push(v);k++}
+const o=shuffle([c,...set]),a=o.indexOf(c);Q.push([q,o,a,ex,sec,'B']);WHY.push(o.map((x,i)=>i===a?'Correct. The working is below.':`That gives ${x}, which does not match the working below.`));return Q.length-1}
+const GEN=[
+['P',1,4,t=>{const a=R(2,2+t*2),k=R(2,4),j=R(2,3);if(t<3)return mk(`In a 1D box, how many times larger is E for n = ${a} than for n = 1?`,String(a*a),[String(a),String(2*a),String(a**3)],`E ∝ n², so ${a}² = ${a*a}.`,'P');return mk(`A box length is multiplied by ${k} and the particle mass by ${j}. The ground state energy changes by a factor of`,`1/${k*k*j}`,[`1/${k*j}`,String(k*k*j),`1/${k*k}`],`E ∝ 1/(mL²), so the factor is 1/(${j}×${k*k}) = 1/${k*k*j}.`,'P')}],
+['P',1,4,t=>{const k=[0.0231,0.0347,0.0693,0.0462,0.0139][R(0,4)],h=f3(0.693/k);if(t<3)return mk(`A first-order reaction has k = ${k} min⁻¹. Its half-life (min) is`,String(h),[String(f3(h*2)),String(f3(h/2)),String(f3(k*0.693))],`t½ = 0.693/k = ${h} min.`,'P');const n=R(2,4);return mk(`First order, k = ${k} min⁻¹. What fraction remains after ${f3(h*n)} min?`,`1/${2**n}`,[`1/${2**(n+1)}`,`1/${2**(n-1)}`,`1/${n*3}`],`${n} half-lives pass, so (1/2)^${n} = 1/${2**n}.`,'P')}],
+['P',1,2,t=>{const C=R(1,3),P=R(1,C+1),F=C-P+2;return mk(`Degrees of freedom for ${C} component(s) in ${P} phase(s)`,String(F),[String(F+1),String(F-1),String(C+P)],`F = C − P + 2 = ${C} − ${P} + 2 = ${F}.`,'P')}],
+['P',1,5,t=>{const n=R(3,3+t),l=R(0,Math.min(n-1,3)),r=n-l-1;return mk(`How many radial nodes does the ${n}${'spdf'[l]} orbital have?`,String(r),[String(l),String(n-1),String(r+1)],`Radial nodes = n − l − 1 = ${r}.`,'P')}],
+['P',1,3,t=>{const Z=R(1,4),n=R(1,3),E=f3(-13.6*Z*Z/(n*n));return mk(`Energy (eV) of the n = ${n} level of a one-electron ion with Z = ${Z}`,String(E),[String(f3(-13.6*Z/(n*n))),String(f3(-13.6*Z*Z/n)),String(f3(-13.6/(n*n)))],`E = −13.6 Z²/n² = −13.6×${Z*Z}/${n*n} = ${E} eV.`,'P')}],
+['P',2,5,t=>{const n=R(1,3),m=R(1,4),E0=f3(R(5,15)/10),E=f3(E0-0.0592*m/n);return mk(`A cell has E° = ${E0} V with n = ${n} at 298 K. Its E (V) when Q = 10^${m} is`,String(E),[String(f3(E0+0.0592*m/n)),String(f3(E0-0.0592*m*n)),String(f3(E0-0.0592*m))],`E = E° − (0.0592/n) log Q = ${E0} − 0.0592×${m}/${n} = ${E} V.`,'P')}],
+['P',2,3,t=>{const d=[R(2,9),R(2,9),R(2,9),R(2,9)],m=d.reduce((a,b)=>a+b)/4,ss=d.reduce((a,b)=>a+(b-m)**2,0),s=Math.sqrt(ss/3);return mk(`Sample standard deviation of ${d.join(', ')}`,String(f3(s)),[String(f3(Math.sqrt(ss/4))),String(f3(ss/3)),String(f3(m))],`Mean = ${m}. Sum of squared deviations = ${f3(ss)}. Divide by n−1 = 3, then take the root: ${f3(s)}.`,'P')}],
+['P',3,5,t=>{const L=R(1,4),a=R(1,2),b=a+R(1,2),dE=0.376*(b*b-a*a)/(L*L),w=f3(1239.84/dE);return mk(`Electron in a ${L} nm box: wavelength (nm) for the n = ${a} → ${b} transition`,String(w),[String(f3(1239.84/(0.376*(b-a)/(L*L)))),String(f3(w/2)),String(f3(w*2))],`ΔE = 0.376(${b}²−${a}²)/${L}² = ${f3(dE)} eV, λ = 1239.84/ΔE = ${w} nm.`,'P')}],
+['P',4,5,t=>{const Ea=R(4,12)*10,T1=R(30,32)*10,T2=T1+R(2,5)*10,r=Math.exp(Ea*1000/8.314*(1/T1-1/T2)),c=f3(r);return mk(`Ea = ${Ea} kJ/mol. By what factor does k rise from ${T1} K to ${T2} K?`,String(c),[String(f3(T2/T1)),String(f3(1/r)),String(f3(Math.sqrt(r)))],`k₂/k₁ = exp[(Ea/R)(1/T₁ − 1/T₂)] = ${c}.`,'P')}],
+['P',4,5,t=>{const v=R(2,8)*100,T=R(2,5)*100,r=Math.exp(-v/(0.695*T));return mk(`Population ratio N₂/N₁ for levels ${v} cm⁻¹ apart at ${T} K (kT = 0.695T cm⁻¹)`,String(f3(r)),[String(f3(r*2)),String(f3(Math.exp(v/(0.695*T)))),String(f3(1-r))],`N₂/N₁ = exp(−ν/kT) = exp(−${v}/${f3(0.695*T)}) = ${f3(r)}.`,'P')}],
+['I',1,5,t=>{const x=R(2,8),low=t>=3&&x>=4&&x<=7,u=low?[0,0,0,0,2,1,0,1][x]:(x<=5?x:10-x),mu=f3(Math.sqrt(u*(u+2)));return mk(`Spin-only magnetic moment (BM) of an octahedral d${x} complex, ${low?'low':'high'}-spin`,String(mu),[String(f3(Math.sqrt((u+1)*(u+3)))),String(f3(Math.sqrt(Math.max(u-1,0)*(Math.max(u-1,0)+2)))),String(u)],`${u} unpaired electron(s), so μ = √(n(n+2)) = ${mu} BM.`,'I')}],
+['I',2,5,t=>{const x=R(3,8),low=x>=4&&x<=7&&Math.random()<.5;let tg,eg;if(low){tg=Math.min(x,6);eg=x-tg}else{tg=Math.min(x,3);eg=Math.min(Math.max(x-3,0),2);tg+=Math.max(x-5,0)}const c=f3(-0.4*tg+0.6*eg);return mk(`CFSE (in Δo, ignoring pairing energy) of octahedral d${x}, ${low?'low':'high'}-spin`,String(c),[String(f3(0.4*tg-0.6*eg)),String(f3(-0.4*tg)),String(f3(-0.4*tg+0.6*(eg+1)))],`t₂g${tg} eg${eg}: ${tg}×(−0.4) + ${eg}×(+0.6) = ${c} Δo.`,'I')}]
+];
+function fillLv(){const s=$('lv');s.innerHTML='';for(let i=1;i<=Math.min(100,st.lv);i++){const o=document.createElement('option');o.value=i;o.textContent='Level '+i;s.appendChild(o)}s.value=curLv}
+function finishLevel(){if(right>=needFor()){st.lv=Math.max(st.lv,Math.min(100,curLv+1));if(curLv>=10)award('q10');if(curLv>=50)award('q50');if(curLv>=100)award('q100');save();toast('Level '+curLv+' cleared!')}}
+function start(){const t=Math.ceil(curLv/20),n=curLv%10===0?8:5;
+const pool=Q.map((_,i)=>i).filter(i=>i<BASE&&(sec==='A'||(Q[i][4]||'P')===sec)&&okEx(Q[i][5]||'B'));
+const pref=pool.filter(i=>DIFF[i]===t||DIFF[i]===t-1);
+const out=shuffle(pref.length>=2?pref:pool).slice(0,Math.ceil(n/2));
+const gs=GEN.filter(g=>t>=g[1]&&t<=g[2]&&(sec==='A'||g[0]===sec));
+while(out.length<n&&gs.length)out.push(gs[R(0,gs.length-1)][3](t));
+round=shuffle(out);idx=0;streak=0;right=0;fillLv();render()}
+let picked=null;
+function showWhy(){const q=Q[round[idx]],w=WHY[round[idx]]||[];$('ex').innerHTML=q[1].map((o,j)=>`<div class='why${j===q[2]?' c':j===picked?' p':''}'><b>${j===q[2]?'✓ ':'✗ '}${o}${j===picked&&j!==q[2]?' (your pick)':''}</b>: ${w[j]||''}</div>`).join('')+'<p>'+q[3]+'</p>'}
+const WHY=[
+['Misses the factor 2: [x,p²] = p[x,p] + [x,p]p','Correct: gives 2iħp','Sign is wrong, since [x,p] = +iħ','No operator p is left, so the dimensions fail'],
+['Only counts one ordering of (1,2,3)','Correct: (1,2,3) permuted gives 3! = 6 states','All three n differ, so 1 is too few','12 over-counts, since a box has no sign choices'],
+['Correct: radial = n−l−1 = 1, angular = l = 2','Radial and angular counts are swapped','Radial nodes are 1, not 0','Angular nodes equal l = 2, not 3'],
+['ZPE falls on deuteration, it does not double','√2 goes in the wrong direction','Correct: ZPE ∝ 1/√μ and μ doubles','1/2 would need μ to quadruple'],
+['That is the magnitude |p|. The average over ±p cancels','Correct: ψ is real, so ⟨p⟩ = 0','ħ is not an eigenvalue here','That is |p| for a travelling wave, not the average'],
+['Levels are equally spaced','ZPE is ½ħω, not zero','Correct: the virial theorem gives ⟨T⟩ = ⟨V⟩','Δv = ±1 is the main selection rule'],
+['2p has a node at the nucleus','3d has a node at the nucleus','Correct: s orbitals are nonzero at r = 0','4f has a node at the nucleus'],
+['Lighter mass increases tunneling','Correct: T ∝ e^(−2κL) falls with width','A lower barrier increases tunneling','E closer to V increases tunneling'],
+['3× ignores the square','6× is 2n, not n²','Correct: E ∝ n², so 9×','27× would be n³'],
+['4 counts the end points too','Correct: n−1 = 3 nodes','5 is n+1','2 is n−2'],
+['L² commutes with Lz','x and p_y are on different axes and commute','p_x and p_y commute','Correct: [Lx,Ly] = iħLz ≠ 0'],
+['That is hydrogen with Z = 1','−27.2 uses Z instead of Z²','Correct: −13.6 × 4 = −54.4','−6.8 is n = 2 of hydrogen'],
+['3 counts the l values only','6 is not n²','Correct: n² = 9 (3s + 3p + 3d orbitals)','18 includes spin'],
+['√2 is for l = 1','Correct: √(l(l+1)) = √6','2 is not √(l(l+1)) for any l','√12 is for l = 3'],
+['3 is the 1→2 gap','4 is not a difference of squares here','Correct: 3² − 2² = 5','7 is the 3→4 gap (16 − 9)'],
+['A sine function is the box ground state','Correct: ψ₀ ∝ e^(−ξ²/2)','Exponential decay is for a barrier region','A linear function is not normalizable'],
+['ħω/2 is the total energy','Correct: ⟨V⟩ = E/2 = ħω/4','Zero ignores the zero-point energy','ħω exceeds the total energy'],
+['Δp must grow, not shrink','Δp cannot stay fixed when Δx changes','Correct: ΔxΔp ≥ ħ/2 so Δp doubles','Doubling is enough, quadrupling is not required'],
+['Imaginary values are not observable','Correct: Hermitian operators have real eigenvalues','Complex values are not observable','Zero is not required'],
+['E falls with larger L','1/2 would be E ∝ 1/L','Correct: E ∝ 1/L², so 1/4','4× goes in the wrong direction'],
+['0.5a₀ is not the maximum','Correct: 4πr²ψ² peaks at a₀','1.5a₀ is the mean ⟨r⟩','2a₀ is not the maximum'],
+['Correct: the lightest isotope tunnels most','D is heavier, so it tunnels less','T is the heaviest, so it tunnels least','Mass changes κ, so they differ'],
+['Δv = 2 is forbidden for an ideal oscillator','Correct: Δv = ±1','Δv = 3 is forbidden','Allowed transitions do exist'],
+['Positive ΔG means non-spontaneous','Correct: spontaneous means ΔG < 0','Zero ΔG means equilibrium','ΔG is not simply ΔH'],
+['S has the wrong sign','Correct: dG = −S dT + V dP','H is not the derivative','−H is not the derivative'],
+['F = 0 would need three phases','Correct: F = 1 − 2 + 2 = 1','F = 2 is for a single phase','F = 3 is not possible here'],
+['5 min would need k = 0.139','Correct: 0.693/0.0693 = 10','20 min would need k = 0.0347','0.693 is only the numerator'],
+['Correct: 0.0592/n at 298 K with log10','0.0257 is RT/F, used with ln','0.118 is for n = 0.5','The slope falls with n, not rises'],
+['B is the first line from J = 0 only, not the spacing','Correct: lines at 2B(J+1), spacing 2B','4B is double the spacing','B/2 is too small'],
+['That is the Raman condition','Correct: a changing dipole gives IR','Mass does not decide activity','Homonuclear stretches are IR inactive'],
+['Correct: one C₂ axis plus two σv planes','C₂h has σh, not σv','D₂h has three C₂ axes','Cs has no C₂ axis'],
+['P⁰ is the saturation limit','Correct: θ ≈ KP at low P','P² is not a Langmuir form','√P is for dissociative adsorption'],
+['I alone is not the dependence','Correct: log γ ∝ −√I','I² is not the dependence','1/I is not the dependence'],
+['Microcanonical fixes N, V, E','Canonical fixes N, V, T','Correct: grand canonical fixes μ, V, T','Isobaric is not one of the three standard ensembles'],
+['Correct: PDI = Mw/Mn','Degree of polymerization is chain length','Tacticity is stereo-arrangement','Conversion is the fraction reacted'],
+['Correct: mean 5, s² = 20/3, s ≈ 2.58','2.24 uses n, which is the population SD','4 is the wrong mean','6.67 is the variance, not the SD'],
+['Correct: sinθ = λ/2d = 0.25','0.5 would need d = 1.54','0.75 is not λ/2d','1 means θ = 90°, not this case'],
+['5 is n','6 is n+1, which is closo','Correct: nido is n+2 = 7','8 is n+3, which is arachno'],
+['1.73 is one unpaired electron','3.87 is three unpaired electrons','4.90 is four unpaired electrons','Correct: five unpaired, √35 = 5.92'],
+['Correct: 6 × (−0.4) = −2.4','−1.6 is for a different configuration','−0.4 is one t₂g electron','−1.2 is for d³'],
+['16 would miss two electrons','Correct: 8 + 5×2 = 18','20 exceeds the limit','17 is odd and not stable'],
+['Correct: low-spin d⁶ has 0 unpaired','Two unpaired is not strong-field Fe²⁺','Four unpaired is high-spin d⁶','Six exceeds d⁶'],
+['1/2 is one half-life','Correct: (1/2)² = 1/4','1/8 is three half-lives','1/3 is not a power of 1/2'],
+['Correct: the Bailar twist racemizes octahedral tris-chelates','Square-planar substitution is associative','Electron transfer is not a twist','Oxidative addition is not a twist'],
+['Correct: isomer shift reflects oxidation state and s density','Mass is not measured','Quadrupole splitting gives symmetry, not spin only','Bond length is not given directly'],
+['Correct: RhCl(PPh₃)₃ hydrogenates alkenes','Wacker uses Pd/Cu','Metathesis uses Ru or Mo carbenes','Fischer–Tropsch uses Fe or Co surfaces'],
+['Cyclobutadiene has 4 π electrons, so antiaromatic','The cation has 4 π electrons','Correct: the anion has 6 π electrons','Cyclooctatetraene is non-planar with 8 π electrons'],
+['Retention is not the SN2 outcome','Correct: backside attack inverts the centre','Racemization is characteristic of SN1','SN2 does occur at chiral carbons'],
+['Correct: thermal 4n π is conrotatory','Disrotatory is the photochemical mode','Each condition allows only one mode','Allowed modes exist'],
+['Correct: it needs an allylic alcohol','Simple alkenes lack the directing OH','Ketones are not epoxidized this way','Alkynes are not substrates'],
+['Correct: Hunsdiecker','Clemmensen reduces ketones to alkanes','Cannizzaro disproportionates aldehydes','Wolff rearranges diazoketones'],
+['Correct: CH₃ triplet and CH₂ quartet','Isopropyl gives a doublet and a septet','tert-Butyl gives a singlet','Vinyl gives a dd pattern'],
+['90:10 is 80% ee','Correct: 95 − 5 = 90','99:1 is 98% ee','80:20 is 60% ee'],
+['Correct: Suzuki uses organoboron reagents','Stille uses organotin','Negishi uses organozinc','Kumada uses Grignards']
+];
+const KP=[
+'Operators are Hermitian and [x,p] = iħ. Box: E = n²h²/8mL². Oscillator: E = (v+½)ħω. Hydrogen: total nodes n−1. Tunneling ∝ e^(−2κL).',
+'Variation: trial energy ≥ true ground energy. First-order perturbation: E¹ = ⟨ψ⁰|H′|ψ⁰⟩. Secular determinant gives LCAO energies.',
+'Term symbol ²ˢ⁺¹L_J. Hund’s rules: maximum S, then maximum L. Ground terms: p² is ³P, d² is ³F. Pauli: wavefunction is antisymmetric (Slater determinant).',
+'Bond order = (bonding − antibonding)/2. O₂ and B₂ are paramagnetic. Hückel: butadiene α±1.618β, α±0.618β. Benzene α±2β, α±β.',
+'Reduction formula n_i = (1/h)Σ g χ_red χ_irr. IR active if it transforms as x, y or z. Raman active if quadratic. Mutual exclusion in centrosymmetric molecules.',
+'Rotation: E = BJ(J+1), line spacing 2B, needs a dipole. Vibration: Δv = ±1, IR needs a dipole change, Raman needs polarizability change. Franck–Condon principle. A = εcl.',
+'Maxwell: (∂S/∂V)_T = (∂P/∂T)_V. ΔG = ΔH − TΔS. ΔG° = −RT ln K. van’t Hoff: d ln K/dT = ΔH/RT². Gibbs–Duhem: Σ n dμ = 0. Raoult P = xP*, Henry P = Kx.',
+'Phase rule F = C − P + 2. Clausius–Clapeyron dP/dT = ΔH/TΔV. Azeotropes cannot be separated by simple distillation. Eutectic is the lowest melting composition.',
+'q = Σ g e^(−ε/kT). q_trans = (2πmkT/h²)^(3/2)V. q_rot = T/σΘ. U = kT² ∂lnQ/∂T. S = k ln W. Equipartition gives ½kT per quadratic term.',
+'Microcanonical: N,V,E. Canonical: N,V,T. Grand canonical: μ,V,T. Ideal gas Q = q^N/N!. A = −kT ln Q.',
+'E = E° − (0.0592/n) log Q. ΔG = −nFE. Λ = Λ° − K√c. Λ° = λ₊ + λ₋. DH: log γ = −0.509 z²√I. Strong acid with strong base conductometric curve is V-shaped.',
+'First order: ln[A] = ln[A]₀ − kt, t½ = 0.693/k. Arrhenius k = Ae^(−Ea/RT). Steady state: d[I]/dt ≈ 0. Eyring k = (kT/h)e^(−ΔG‡/RT). Michaelis–Menten v = Vmax[S]/(Km+[S]).',
+'Langmuir θ = KP/(1+KP). Freundlich x/m = kP^(1/n). BET gives surface area. Physisorption is weak and multilayer, chemisorption is monolayer. Higher counter-ion charge coagulates better.',
+'Bragg nλ = 2d sinθ. Cubic d = a/√(h²+k²+l²). Packing: SC 0.52, BCC 0.68, FCC and HCP 0.74. NaCl 6:6, CsCl 8:8, ZnS 4:4.',
+'Mn = ΣNM/ΣN, Mw = ΣNM²/ΣNM, PDI = Mw/Mn ≥ 1. Free-radical chain: initiation, propagation, termination. Step growth versus chain growth.',
+'Sample SD uses n−1. Absolute error versus relative error. Regression slope = Σ(x−x̄)(y−ȳ)/Σ(x−x̄)². Correlation r lies between −1 and 1.',
+'Repulsion order: lp–lp > lp–bp > bp–bp. SF₄ see-saw, ClF₃ T-shaped, XeF₄ square planar, XeF₂ linear, IF₇ pentagonal bipyramid. Inert pair effect in heavy p-block.',
+'Lewis and Brønsted definitions. HSAB: hard prefers hard (H⁺, Al³⁺, F⁻), soft prefers soft (Hg²⁺, I⁻). The solvent has a leveling effect.',
+'Liquid NH₃ dissolves alkali metals to give blue solvated electrons. Other solvents: SO₂, HF, H₂SO₄ (autoionize). Superacid: HF–SbF₅.',
+'Boranes: closo n+1, nido n+2, arachno n+3 pairs. B₂H₆ has 3c–2e bonds. Borazine is inorganic benzene. Industry: Haber (NH₃), Contact (H₂SO₄), Ostwald (HNO₃).',
+'Wade’s rules and Zintl ions. Re₂Cl₈²⁻ has a quadruple bond (σ²π⁴δ²). Isolobal analogy links fragments. Fe₃(CO)₁₂ and Mo₆, Nb₆ halide clusters.',
+'Spectrochemical: I⁻ < Br⁻ < Cl⁻ < F⁻ < H₂O < NH₃ < en < CN⁻ < CO. μ = √(n(n+2)). Jahn–Teller: d⁹, high-spin d⁴, low-spin d⁷. Octahedral substitution is usually dissociative, square planar is associative. Inert: d³ and low-spin d⁶.',
+'Tanabe–Sugano diagrams plot energies against Δ/B. The nephelauxetic effect lowers the Racah parameter B in complexes. Ray–Dutt and Bailar twists racemize tris-chelates.',
+'Lanthanide contraction. +3 is common, Ce⁴⁺ and Eu²⁺ exist. f–f transitions are weak and sharp. Separation is by ion exchange. Actinides show more oxidation states.',
+'18-electron rule. More back-bonding lowers ν(CO). Oxidative addition raises oxidation state by 2. Cycles: Wilkinson, hydroformylation, Monsanto, Wacker, metathesis, Ziegler–Natta, Fischer–Tropsch.',
+'Hemoglobin and myoglobin use Fe²⁺. Hemocyanin uses Cu. Nitrogenase has Mo–Fe. Carbonic anhydrase has Zn. B₁₂ has Co. Chlorophyll has Mg. Na⁺/K⁺ pump.',
+'Spinel AB₂O₄ (normal and inverse). Perovskite ABX₃. Antifluorite A₂X. Zeolites are microporous aluminosilicates used for shape-selective catalysis.',
+'IR C=O about 1700 cm⁻¹. EPR hyperfine splitting. Mössbauer: isomer shift and quadrupole splitting (⁵⁷Fe, ¹¹⁹Sn). CV: reversible ΔEp ≈ 59/n mV. TGA measures mass loss, DTA and DSC measure heat flow.',
+'N = N₀e^(−λt), t½ = 0.693/λ. Mass defect: 1 u = 931.5 MeV. Fission splits heavy nuclei, fusion joins light ones. Neutron activation analysis. Geiger counter.',
+'Longest chain, lowest locants. Priority: COOH > ester > amide > nitrile > aldehyde > ketone > alcohol > amine. E/Z by CIP priorities and R/S for centres.',
+'R/S by CIP rules. Meso compounds are achiral. ee = |R−S|/(R+S). Gauche and anti conformers. Chair cyclohexane, axial versus equatorial. Atropisomerism. Cram and Felkin–Anh models. Homotopic, enantiotopic, diastereotopic.',
+'Hückel 4n+2 is aromatic. Cyclopentadienyl anion and tropylium cation are aromatic. Cyclobutadiene is antiaromatic. Azulene is non-benzenoid aromatic.',
+'Carbocation stability: 3° > 2° > 1°, allyl and benzyl are stable. Carbanion order is reversed. Carbenes are singlet or triplet. Benzyne comes from o-haloaryl with strong base.',
+'SN1 versus SN2, E1 versus E2 (anti-periplanar). Hammond postulate. Curtin–Hammett. Hammett ρ > 0 means negative charge builds up. Primary KIE kH/kD of 2 to 7 means C–H breaks in the rate-determining step.',
+'Aldol, Claisen, Cannizzaro, Wittig, Grignard, Friedel–Crafts, Beckmann, Baeyer–Villiger, Hofmann, Curtius, Pinacol, Fries. Couplings: Heck, Suzuki, Stille, Sonogashira, Negishi, Kumada.',
+'PCC to aldehyde, Jones to acid, Swern, Dess–Martin, MnO₂ (allylic). mCPBA epoxidizes alkenes. OsO₄ gives syn diols. NaBH₄ reduces aldehydes and ketones, LiAlH₄ reduces most carbonyls, DIBAL-H gives aldehydes from esters. Lindlar gives cis, Na/NH₃ gives trans.',
+'Disconnection, synthon, synthetic equivalent. Umpolung: 1,3-dithiane (Corey–Seebach). Protecting groups: TBS for alcohols, Boc for amines, acetals for carbonyls. Convergent beats linear synthesis.',
+'Evans oxazolidinone auxiliary. Proline-catalyzed aldol. Sharpless epoxidation and dihydroxylation. CBS reduction. Kinetic resolution. ee is measured by chiral HPLC.',
+'Thermal 4n+2 suprafacial cycloaddition is allowed. Electrocyclic: 4n thermal is conrotatory, 4n+2 thermal is disrotatory. Diels–Alder endo rule. Cope and Claisen are [3,3]. Norrish I and II. Paternò–Büchi gives oxetanes.',
+'Pyrrole, furan and thiophene react at C2. Pyridine reacts at C3 (electrophiles) and C2/C4 (nucleophiles). Syntheses: Paal–Knorr, Fischer indole, Skraup, Pictet–Spengler. Pyridine is more basic than pyrrole.',
+'Amino acid pI is the average of the two relevant pKa values. Merrifield solid-phase peptide synthesis. Edman degradation. Glucose mutarotation. Sucrose is non-reducing. Terpenes follow the isoprene rule.',
+'IR: C=O about 1715, O–H about 3300 (broad), C≡N about 2250. ¹H NMR uses the n+1 rule. ¹³C C=O at 170 to 210 ppm. MS: M⁺ and McLafferty. UV λmax from Woodward–Fieser rules.',
+'Quantum dots: size sets the band gap. Green chemistry: 12 principles and atom economy. Supramolecular: host–guest, crown ethers, cyclodextrins. Environmental: ozone depletion, smog, BOD and COD.'
+];
+const SYL=`P|Quantum mechanics: postulates, box, oscillator, hydrogen, tunneling|B;P|Variation and perturbation theory|B;P|Atomic structure, term symbols, antisymmetry|B;P|Chemical bonding: MO, VB, Hückel theory|B;P|Group theory, character tables, selection rules|B;P|Molecular spectroscopy: rotation, vibration, Raman, electronic, NMR basics|B;P|Thermodynamics: laws, Maxwell relations, spontaneity, solutions|B;P|Phase equilibria: one and two component diagrams, azeotropes, eutectics|G;P|Statistical thermodynamics: Boltzmann, partition functions|B;P|Micro, canonical and grand canonical ensembles|G;P|Electrochemistry: Nernst, conductance, Debye–Hückel|B;P|Kinetics: complex reactions, steady state, collision and transition state theory|B;P|Colloids, surfaces, adsorption isotherms|B;P|Solid state: crystal structures, Bragg, bands|B;P|Polymer chemistry|C;P|Data analysis: mean, SD, regression, correlation|C;I|Periodicity, VSEPR, structure and bonding|B;I|Acids and bases, HSAB|B;I|Non-aqueous solvents|C;I|Main group chemistry, boranes, allotropes|B;I|Cages and metal clusters|C;I|Coordination chemistry: CFT, spectra, magnetism, mechanisms|B;I|Tanabe–Sugano diagrams, Ray–Dutt and Bailar twists|G;I|Lanthanides and actinides|B;I|Organometallics and catalysis|B;I|Bioinorganic chemistry|B;I|Solids: AX, AX2, ABX3, spinels, zeolites|G;I|Analytical and instrumental methods: IR, NMR, EPR, Mössbauer, CV, TGA|B;I|Nuclear chemistry|C;O|IUPAC nomenclature|C;O|Stereochemistry and conformations|B;O|Aromaticity|B;O|Reactive intermediates|B;O|Reaction mechanisms, Hammond, Curtin–Hammett, Hammett|B;O|Named reactions and coupling reactions|B;O|Oxidation and reduction reagents|B;O|Retrosynthesis, umpolung, protecting groups|B;O|Asymmetric synthesis|B;O|Pericyclic reactions and photochemistry|B;O|Heterocycles|B;O|Biomolecules and natural products|B;O|Spectroscopic structure determination|B;O|Interdisciplinary: nano, green, medicinal, supramolecular, environmental|C`.split(';').map(x=>x.split('|'));
+let chk={};try{chk=JSON.parse(localStorage.getItem('qm-chk')||'{}')}catch(e){}
+function cnt(){let t=0,d=0;SYL.forEach((s,i)=>{if(okEx(s[2])){t++;if(chk[i])d++}});$('sylc').textContent=d+' of '+t+' topics covered'}
+function renderSyl(){const el=$('syll');el.innerHTML='';
+[['P','Physical'],['I','Inorganic'],['O','Organic']].forEach(([s,n])=>{const h=document.createElement('h2');h.textContent=n;el.appendChild(h);
+SYL.forEach((t,i)=>{if(t[0]!==s||!okEx(t[2]))return;const l=document.createElement('label');l.className='sy';const c=document.createElement('input');c.type='checkbox';c.checked=!!chk[i];
+c.onchange=()=>{chk[i]=c.checked;try{localStorage.setItem('qm-chk',JSON.stringify(chk))}catch(e){}cnt()};
+l.append(c,' '+t[1]+(t[2]==='C'?' (CSIR only)':t[2]==='G'?' (GATE only)':''));el.appendChild(l);const d=document.createElement('details');d.className='kp';d.innerHTML='<summary>Key points</summary><p>'+(KP[i]||'')+'</p>';el.appendChild(d)})});cnt()}
+$('exam').value=ex;
+$('exam').onchange=e=>{ex=e.target.value;try{localStorage.setItem('qm-ex',ex)}catch(x){}renderSyl();start()};
+$('sec').onchange=e=>{sec=e.target.value;start()};
+$('lv').onchange=e=>{curLv=+e.target.value;start()};
+renderSyl();start();
+show('quiz');
+</script>
+</body>
+</html>
